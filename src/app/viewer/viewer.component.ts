@@ -27,50 +27,77 @@ import {ImageService} from "../services/image.service"
                 transform: 'translate(0px, 0px)'
             })),
             state('leaveToLeft', style({
-                opacity: 0,
+                opacity: 0.5,
                 transform: 'translate(-100px, 0px)'
             })),
             state('leaveToRight', style({
-                opacity: 0,
+                opacity: 0.5,
                 transform: 'translate(100px, 0px)'
             })),
+            state('rotateClockwise', style({
+                transform: 'rotate(90deg)',
+            })),
+            state('rotateAntiClockwise', style({
+                transform: 'rotate(270deg)',
+            },)),
+            state('rotateTwice', style({
+                transform: 'rotate(180deg)'
+            })),
+            transition('* => rotateTwice', [
+                style({
+                    opacity: 0.5,
+                }),
+                animate('150ms 150ms ease-in')
+            ]),
+            transition('* => rotateAntiClockwise', [
+                style({
+                    opacity: 0.5,
+                }),
+                animate('150ms 150ms ease-in')
+            ]),
+            transition('* => rotateClockwise', [
+                style({
+                    opacity: 0.5,
+                }),
+                animate('150ms 150ms ease-in')
+            ]),
             transition('* => enterFromRight', [
                 style({
-                    opacity: 0,
+                    opacity: 0.5,
                     transform: 'translate(30px, 0px)'
                 }),
-                animate('250ms 500ms ease-in')
+                animate('150ms 150ms ease-in')
             ]),
             transition('* => enterFromLeft', [
                 style({
-                    opacity: 0,
+                    opacity: 0.5,
                     transform: 'translate(-30px, 0px)'
                 }),
-                animate('250ms 500ms ease-in')
+                animate('150ms 150ms ease-in')
             ]),
             transition('* => leaveToLeft', [
                 style({
                     opacity: 1
                 }),
-                animate('250ms ease-out')]
+                animate('150ms ease-out')]
             ),
             transition('* => leaveToRight', [
                 style({
                     opacity: 1
                 }),
-                animate('250ms ease-out')]
-            )
+                animate('150ms ease-out')]
+            ),
         ]),
         trigger('showViewerTransition', [
             state('true', style({
                 opacity: 1
             })),
             state('void', style({
-                opacity: 0
+                opacity: 0.5
             })),
             transition('void => *', [
                 style({
-                    opacity: 0
+                    opacity: 0.5
                 }),
                 animate('1000ms ease-in')]
             ),
@@ -176,6 +203,22 @@ export class ViewerComponent {
         }
     }
 
+    private rotate(direction: string) {
+        switch (direction) {
+            case 'rotateClockwise':
+                this.images[this.currentIdx]['transition'] = 'rotateClockwise';
+                break;
+            case 'rotateAntiClockwise':
+                this.images[this.currentIdx]['transition'] = 'rotateAntiClockwise';
+                break;
+            case 'rotateTwice':
+                this.images[this.currentIdx]['transition'] = 'rotateTwice';
+                break;
+        }
+        this.updateImage()
+
+    }
+
     private hideNavigationArrows() {
         this.leftArrowVisible = false
         this.rightArrowVisible = false
@@ -256,7 +299,7 @@ export class ViewerComponent {
     }
 
     private onKeydown(event: KeyboardEvent) {
-        let prevent = [37, 39, 27, 36, 35]
+        let prevent = [37, 38, 39, 40, 27, 36, 35]
             .find(no => no === event.keyCode)
         if (prevent) {
             event.preventDefault()
@@ -267,10 +310,18 @@ export class ViewerComponent {
                 // navigate left
                 this.navigate(-1, false)
                 break
+            case 38:
+                // rotate clockwise
+                this.rotate('rotateClockwise');
+                break;
             case 39:
                 // navigate right
                 this.navigate(1, false)
                 break
+            case 40:
+                // rotate clockwise
+                this.rotate('rotateAntiClockwise');
+                break;
             case 27:
                 // esc
                 this.closeViewer()
