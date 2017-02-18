@@ -1,17 +1,13 @@
 <div class="mainContainer">
-    <div class="headlineContainer">
-        angular2-image-gallery &nbsp;
-        <a class="github-button" href="https://github.com/benjaminbrandmeier/angular2-image-gallery" data-style="mega" data-count-href="/benjaminbrandmeier/angular2-image-gallery/stargazers" data-count-api="/repos/benjaminbrandmeier/angular2-image-gallery#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star benjaminbrandmeier/angular2-image-gallery on GitHub">Star</a>
-    </div>
     <md-input-container>
         <input md-input [(ngModel)]="flexBorderSize" type="number" min="1" max="50" placeholder="Space between images">
     </md-input-container>
     <md-input-container>
         <input md-input [(ngModel)]="flexImageSize" type="number" min="0" max="50" placeholder="Image size">
     </md-input-container>
+    <input md-input [(ngModel)]="galsrc" type="string">
 
-    <gallery (viewerChange)="onViewerVisibilityChanged($event)" [flexBorderSize]="flexBorderSize" [flexImageSize]="flexImageSize"></gallery>
+    <gallery (viewerChange)="onViewerVisibilityChanged($event)" [flexBorderSize]="flexBorderSize" [flexImageSize]="flexImageSize" [galsrc] = "galsrc"></gallery>
 
     <br/><br/>
-    <span>built with </span><a href="https://github.com/BenjaminBrandmeier/angular2-image-gallery">angular2-image-gallery</a>
 </div>

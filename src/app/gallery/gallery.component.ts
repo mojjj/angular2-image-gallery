@@ -14,7 +14,8 @@ import {Subscription} from 'rxjs';
 })
 export class GalleryComponent implements OnInit, OnDestroy, OnChanges {
     @Input('flexBorderSize') providedImageMargin: number = 3
-    @Input('flexImageSize') providedImageSize: number = 7
+    @Input('flexImageSize') providedImageSize: number = 7;
+    @Input('galsrc') gallerySrc: string = '';
 
     @Output() viewerChange = new EventEmitter<boolean>()
 
@@ -29,7 +30,7 @@ export class GalleryComponent implements OnInit, OnDestroy, OnChanges {
         this.render()
     }
 
-    private imageDataFilePath: string = 'assets/img/gallery/data.json'
+    private imageDataFilePath: string = this.gallerySrc;
     private images: any[] = []
     private gallery: any[] = []
     private minimalQualityCategory = 'preview_xxs'
@@ -45,6 +46,14 @@ export class GalleryComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges) {
+        if(changes['gallerySrc']) {
+            console.dir(changes)
+            this.imageDataFilePath= changes['gallerySrc'].currentValue;
+
+            this.ngOnInit();
+        } else {
+            this.imageDataFilePath=''
+        }
         // input params changed
         this.render()
     }

@@ -11,6 +11,7 @@ export class DemoComponent implements OnInit {
 
   private flexBorderSize: number = 3
   private flexImageSize: number = 7
+  private galsrc: string = 'assets/img/gallery/data.json';
 
   ngOnInit() {
   }
