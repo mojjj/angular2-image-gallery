@@ -1,11 +1,23 @@
 import {
-    Component, ViewChild, ElementRef, HostListener, ViewChildren,
-    ChangeDetectorRef, QueryList, OnInit, Input, SimpleChanges, OnChanges, Output, EventEmitter, OnDestroy
-} from "@angular/core"
-import {Http, Response} from "@angular/http"
-import "rxjs/Rx"
-import {ImageService} from "../services/image.service"
-import {Subscription} from 'rxjs';
+    Component,
+    ViewChild,
+    ElementRef,
+    HostListener,
+    ViewChildren,
+    ChangeDetectorRef,
+    QueryList,
+    OnInit,
+    Input,
+    SimpleChanges,
+    OnChanges,
+    Output,
+    EventEmitter,
+    OnDestroy
+} from "@angular/core";
+import {Http, Response} from "@angular/http";
+import "rxjs/Rx";
+import {ImageService} from "../services/image.service";
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'gallery',
@@ -42,20 +54,19 @@ export class GalleryComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnInit() {
         this.fetchDataAndRender()
         this.viewerSubscription = this.ImageService.showImageViewerChanged$
-            .subscribe( (visibility: boolean) => this.viewerChange.emit(visibility));
+            .subscribe((visibility: boolean) => this.viewerChange.emit(visibility));
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if(changes['gallerySrc']) {
-            console.dir(changes)
-            this.imageDataFilePath= changes['gallerySrc'].currentValue;
 
+        //reload gallery on new data selected
+        if (changes['gallerySrc']) {
+            this.imageDataFilePath = changes['gallerySrc'].currentValue;
             this.ngOnInit();
         } else {
-            this.imageDataFilePath=''
+            this.imageDataFilePath = '';
+            this.render()
         }
-        // input params changed
-        this.render()
     }
 
     public ngOnDestroy() {
@@ -75,16 +86,16 @@ export class GalleryComponent implements OnInit, OnDestroy, OnChanges {
             .subscribe(
                 data => {
                     this.images = data
-                    this.ImageService.updateImages(this.images)
+                    this.ImageService.updateImages(this.images);
 
                     this.images.forEach((image) => {
-                        image['galleryImageLoaded'] = false
-                        image['viewerImageLoaded'] = false
+                        image['galleryImageLoaded'] = false;
+                        image['viewerImageLoaded'] = false;
                         image['srcAfterFocus'] = ''
-                    })
+                    });
                     // twice, single leads to different strange browser behaviour
-                    this.render()
-                    this.render()
+                    this.render();
+                    this.render();
                 },
                 err => console.error("Did you run the convert script from angular2-image-gallery for your images first? Original error: " + err),
                 () => undefined)
