@@ -57,6 +57,11 @@ export class GalleryComponent implements OnInit, OnDestroy, OnChanges {
             .subscribe((visibility: boolean) => this.viewerChange.emit(visibility));
     }
 
+    ngAfterViewInit(): void {
+        this.imageElements.changes
+            .subscribe(() => console.log(this.imageElements));
+    }
+
     public ngOnChanges(changes: SimpleChanges) {
 
         //reload gallery on new data selected
@@ -91,7 +96,8 @@ export class GalleryComponent implements OnInit, OnDestroy, OnChanges {
                     this.images.forEach((image) => {
                         image['galleryImageLoaded'] = false;
                         image['viewerImageLoaded'] = false;
-                        image['srcAfterFocus'] = ''
+                        // image['srcAfterFocus'] = ''
+                        image['srcAfterFocus'] = image[this.minimalQualityCategory]['path']
                     });
                     // twice, single leads to different strange browser behaviour
                     this.render();
@@ -209,14 +215,15 @@ export class GalleryComponent implements OnInit, OnDestroy, OnChanges {
     private checkForAsyncLoading(image, imageCounter: number) {
         let imageElements = this.imageElements.toArray()
 
-        if (image['galleryImageLoaded'] ||
-            (imageElements.length > 0 && this.isScrolledIntoView(imageElements[imageCounter].nativeElement))) {
-            image['galleryImageLoaded'] = true
-            image['srcAfterFocus'] = image[this.minimalQualityCategory]['path']
-        }
-        else {
-            image['srcAfterFocus'] = ''
-        }
+        //TODO somehow this resets image src for gallery preview images, as the 'imageElements' is an empty array(maybe async problem)
+        // if (image['galleryImageLoaded'] ||
+        //     (imageElements.length > 0 && this.isScrolledIntoView(imageElements[imageCounter].nativeElement))) {
+        //     image['galleryImageLoaded'] = true
+        //     image['srcAfterFocus'] = image[this.minimalQualityCategory]['path']
+        // }
+        // else {
+        //     image['srcAfterFocus'] = ''
+        // }
     }
 
     private isScrolledIntoView(element) {
