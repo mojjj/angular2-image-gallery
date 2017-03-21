@@ -48,3 +48,5 @@ upload-prod.sh
 .DS_Store
 Thumbs.db
 images_to_convert/
+/gallery/
+/src/data.json

@@ -13,12 +13,16 @@
                      [src]="img['srcAfterFocus']"
                      [style.background]="img.dominantColor"
                      [style.margin-right.px]="calcImageMargin()"/>
-                <video *ngIf="img['mediatype'] == 'video'" preload="auto" height="100%" width="100%"
-                       controls="controls">
+                <video *ngIf="img['mediatype'] == 'video'"
+                       preload="auto"
+                       height="100%"
+                       width="100%"
+                       controls="controls"
+                       (click)="openImageViewer(img)">
                     <source type="video/webm"
-                            src="https://dl.dropboxusercontent.com/u/23979348/spring_static/vid/Zero-kMayhem-Dirtbag-YouTube_360p.webm">
+                            [src]="img['raw']['path']">
                     <source type="video/mp4"
-                            src="https://dl.dropboxusercontent.com/u/23979348/spring_static/vid/Zero-kMayhem-Dirtbag-YouTube_360p.mp4">
+                            [src]="img['raw']['path']">
                     Your browser does not support the video tag. Find out if your Browser is supported at
                     www.w3schools.com/tags/tag_video.asp
                 </video>

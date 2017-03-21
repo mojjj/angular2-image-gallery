@@ -30,33 +30,43 @@
             (swiperight)="navigate(-1, $event)"
             (pan)="pan($event)">
 
-        <!--*ngIf="img['mediatype'] == 'image'"-->
-        <div *ngFor='let img of images; let j = index'
-             class="image"
-             [class.active]="img['active']"
-             [@imageTransition]="img['transition']"
-             [style.background-image]="img['viewerImageLoaded'] ? 'url('+img[categorySelected]['path']+')' : Math.abs(currentIdx-j) <=1 ? 'url('+img['preview_xxs']['path']+')' : ''"
-             [style.left]="transform+'px'"></div>
+        <!--detailed view-->
+        <div class="fir" *ngFor='let img of images; let j = index'>
+            <div *ngIf="img['mediatype'] == 'image'"
+                 class="image"
+                 [class.active]="img['active']"
+                 [@imageTransition]="img['transition']"
+                 [style.background-image]=
+                         "img['viewerImageLoaded'] ?
+                          'url('+img[categorySelected]['path']+')' :
+                          Math.abs(currentIdx-j) <=1 ?
+                          'url('+img['preview_xxs']['path']+')' :
+                          ''"
+                 [style.left]="transform+'px'">
 
-        <div *ngFor='let img of images; let j = index'>
+            </div>
+            <div *ngIf="img['mediatype'] == 'video'">
+                <video class="image"
+                       [class.active]="img['active']"
+                       preload="auto"
+                       height="auto"
+                       width="auto"
+                       controls="controls">
+                    <source type="video/webm"
+                            [src]="img['raw']['path']">
+                    <source type="video/mp4"
+                            [src]="img['raw']['path']">
+                </video>
+            </div>
+        </div>
+
+        <!--preloading mechanism for images-->
+        <div class="sec" *ngFor='let img of images; let j = index'>
             <img *ngIf="img['mediatype'] == 'image'"
                  class="preloading-image"
                  (load)="imageLoaded(img)"
                  src="{{ Math.abs(currentIdx-j) <=1 ? img[categorySelected]['path'] : ''}}"/>
-            <video *ngIf="img['mediatype'] == 'video'"
-                   preload="auto"
-                   height="auto"
-                   width="auto"
-                   controls="controls">
-                <source type="video/webm"
-                        src="https://dl.dropboxusercontent.com/u/23979348/spring_static/vid/Zero-kMayhem-Dirtbag-YouTube_360p.webm">
-                <source type="video/mp4"
-                        src="https://dl.dropboxusercontent.com/u/23979348/spring_static/vid/Zero-kMayhem-Dirtbag-YouTube_360p.mp4">
-            </video>
+
         </div>
-
     </div>
-    <!--<div >-->
-
-    <!--</div>-->
 </div>
